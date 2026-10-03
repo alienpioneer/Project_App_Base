@@ -1,0 +1,16 @@
+{
+    "doxdocgen.file.copyrightTag": [
+        "All rights reserved."
+    ],
+    "doxdocgen.generic.authorTag": "@author {author}",
+    "doxdocgen.generic.authorName": "Alexandru ALEXANDRESCU",
+    "doxdocgen.generic.dateTemplate": "@date {date}",
+    "doxdocgen.generic.dateFormat": "YYYY",
+    "doxdocgen.generic.briefTemplate": "@brief {text}",
+    "doxdocgen.file.fileOrder": [
+    "file",
+    "author",
+    "copyright",
+    "empty",
+  ],
+}

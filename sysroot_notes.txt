@@ -1,0 +1,28 @@
+sudo apt install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu cmake ninja-build
+
+on the target:
+cd /
+sudo tar --numeric-owner \
+  --exclude=dev \
+  --exclude=proc \
+  --exclude=sys \
+  --exclude=tmp \
+  --exclude=run \
+  --exclude=mnt \
+  --exclude=media \
+  --exclude=lost+found \
+  -czf /tmp/rpi-sysroot.tar.gz .
+  
+on the host:
+scp strutu@192.168.1.32:/tmp/rpi-sysroot.tar.gz .
+
+sudo mkdir -p /opt/rpi-sysroot
+
+sudo tar -xzf rpi-sysroot.tar.gz -C /opt/rpi-sysroot
+
+
+find /opt/rpi-sysroot/usr -path '*/pkgconfig' -type d
+
+
+Download packages then:
+sudo dpkg-deb -x libgbm-dev_22.3.6-1+deb12u2_arm64.deb /opt/rpi-sysroot

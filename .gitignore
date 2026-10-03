@@ -1,0 +1,9 @@
+build/
+build-yocto/
+build-target/
+build-res/
+build-yocto-res/
+build-target-res/
+external/lib_lvgl/libs/host/
+external/lib_lvgl/libs/target/
+deploy/

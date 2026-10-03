@@ -1,0 +1,20 @@
+/**
+ * @mainpage ProjectArchitecture Service Manager and Event System Architecture
+ *
+ * @section overview Overview
+ *
+ * The application is structured around a service-oriented, event-driven architecture.
+ * Each service executes in its own thread and communicates exclusively through a
+ * central EventManager. Direct service-to-service communication is not allowed.
+ *
+ * This design enforces isolation between services, simplifies synchronization,
+ * and ensures deterministic system shutdown.
+ *
+ * Thread model:
+ *
+ * - The **main thread** runs the UI loop.
+ * - The **EventManager** owns a dedicated dispatcher thread.
+ * - Each **Service** runs in its own thread.
+ * - All cross-thread communication happens through events.
+ *
+ */

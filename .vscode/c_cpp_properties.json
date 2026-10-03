@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/include/**",
+                "${workspaceFolder}/external/lib_audiores/include/**",
+                "${workspaceFolder}/external/lib_lvgl/**",
+                "${workspaceFolder}/../Project_Core/deploy/include/**"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc-11",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "linux-gcc-x64",
+            "compileCommands": [
+                ""
+            ]
+        }
+    ],
+    "version": 4
+}

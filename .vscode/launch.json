@@ -1,0 +1,33 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Host",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/deploy/host/app",
+            "args": [], 
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                { "text": "-enable-pretty-printing", "ignoreFailures": true }
+            ],
+            "miDebuggerPath": "/usr/bin/gdb"
+        },
+        {
+            "name": "Target Build and Deploy",
+            "type": "cppdbg",
+            "request": "launch",
+
+            "program": "/bin/bash",
+            "args": ["-c", "./build.sh target deploy"],
+
+            "cwd": "${workspaceFolder}",
+
+            "noDebug": true
+        }
+    ]
+}
