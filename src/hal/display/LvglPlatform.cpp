@@ -24,7 +24,7 @@
 namespace UI
 {
 
-LvglPlatform::LvglPlatform(int width, int height, uint8_t resolution_divider, bool showCursor, bool useCustomInput, bool mirrorX, bool mirrorY)
+LvglPlatform::LvglPlatform(int width, int height, uint8_t resolution_divider, bool showCursor, bool useCustomInput, bool scrTouchMirrorX, bool scrTouchMirrorY)
 {
 
 #ifdef USE_DRM
@@ -34,6 +34,8 @@ LvglPlatform::LvglPlatform(int width, int height, uint8_t resolution_divider, bo
 #else
     (void)showCursor;
     (void)useCustomInput;
+    (void)scrTouchMirrorX;
+    (void)scrTouchMirrorY;
 #endif
 
 // Register custom logging
@@ -63,7 +65,7 @@ LvglPlatform::LvglPlatform(int width, int height, uint8_t resolution_divider, bo
     );
 
 #ifdef USE_DRM
-    init_drm(DRM_DISPLAY_FILE.c_str(), DRM_INPUT_FILE.c_str(), showCursor, useCustomInput, mirrorX, mirrorY);
+    init_drm(DRM_DISPLAY_FILE.c_str(), DRM_INPUT_FILE.c_str(), showCursor, useCustomInput, scrTouchMirrorX, scrTouchMirrorY);
 #else
     init_sdl(width, height, resolution_divider);
 #endif
@@ -180,7 +182,7 @@ void LvglPlatform::init_sdl(int width, int height, uint8_t resolution_divider)
 
     lv_sdl_window_set_zoom(display_, scale);
 
-    SDL_Renderer *renderer = (SDL_Renderer *)lv_sdl_window_get_renderer(display_);
+    SDL_Renderer *renderer = static_cast<SDL_Renderer*>(lv_sdl_window_get_renderer(display_));
 
     SDL_RendererInfo info;
     SDL_GetRendererInfo(renderer, &info);

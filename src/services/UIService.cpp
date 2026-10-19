@@ -79,7 +79,7 @@ void UIService::dispatchLvglEvent(UIAction action, int value)
         return; // Block transitions during error
     }
 
-    uint32_t current_index;
+    // uint32_t current_index;
 
     switch(action) 
     {

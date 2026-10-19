@@ -69,7 +69,7 @@ void IBasePopup::asyncHidePopup(void* user_data) noexcept
         return;
     } 
 
-    lv_obj_set_flag(cur_instance->m_popup, LV_OBJ_FLAG_HIDDEN, true);
+    lv_obj_set_hidden(cur_instance->m_popup,true);
 }
 
 void IBasePopup::asyncShowPopup(void* user_data) noexcept
@@ -81,7 +81,7 @@ void IBasePopup::asyncShowPopup(void* user_data) noexcept
         return;
     } 
 
-    lv_obj_set_flag(cur_instance->m_popup, LV_OBJ_FLAG_HIDDEN, false);
+    lv_obj_set_hidden(cur_instance->m_popup,false);
 }
 
 }// namespace UI

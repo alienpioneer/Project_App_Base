@@ -6,4 +6,5 @@ build-yocto-res/
 build-target-res/
 external/lib_lvgl/libs/host/
 external/lib_lvgl/libs/target/
+external/lib_lvgl/CMakeCache.txt
 deploy/

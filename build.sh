@@ -23,6 +23,7 @@ DEPLOY_DIR=./deploy/target
 
 UNIT_OPT="OFF"
 STATIC_OPT="OFF"
+CLEAN_OPT="OFF"
 
 PYTHON_PATH=$(which python3)
 TARGET="strutu@192.168.1.32"
@@ -34,6 +35,8 @@ do
     case "$arg" in
         host)    MODE="host" ; DEPLOY_DIR="./deploy/host" ;;
         target)  MODE="target";;
+
+        clean)   CLEAN_OPT="ON";;
 
         unit)    MODE="host"; UNIT_OPT="ON"; DEPLOY_DIR="./deploy/host" ;;
         static)  MODE="host"; STATIC_OPT="ON"; DEPLOY_DIR="./deploy/host" ;;
@@ -56,7 +59,7 @@ do
 
         h|--help)
             echo "Usage:"
-            echo "./build.sh [unit] [host|target] [debug|rel|reldeb|min] [run] [deploy] [img|audio|fonts|vector|resall] [sdlsw]"
+            echo "./build.sh [unit] [host|target] [debug|release|reldeb|min] [run] [deploy] [img|audio|fonts|vector|resall] [sdlsw] [clean]"
             exit 0;;
         *)
             echo "Unknown argument: $arg (skipping)";;
@@ -79,7 +82,10 @@ else
 fi
 
 # Clean
-rm -rf "$BUILD_DIR"
+if [ "$CLEAN_OPT" = "ON" ]; then
+    echo "--- Clean project folder ---"
+    rm -rf "$BUILD_DIR"
+fi
 
 echo "------------------------------------------"
 echo "MODE:        $MODE"

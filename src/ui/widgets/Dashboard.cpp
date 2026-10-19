@@ -69,7 +69,7 @@ void Dashboard::CreateMiddleArea()
 
     m_middle_area = lv_obj_create(m_parent);
     lv_obj_set_width(m_middle_area, LV_PCT(100));
-    lv_obj_remove_flag(m_middle_area, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_set_scrollable(m_middle_area, false);
     
     lv_obj_set_flex_grow(m_middle_area, 1);
     
@@ -112,7 +112,8 @@ void Dashboard::CreateBottomBar()
 
     m_bottom_bar = lv_obj_create(m_parent);
     lv_obj_set_size(m_bottom_bar, LV_PCT(100), 80);
-    lv_obj_remove_flag(m_bottom_bar, LV_OBJ_FLAG_SCROLLABLE);
+
+    lv_obj_set_scrollable(m_bottom_bar, false);
 
     lv_obj_set_style_bg_color(m_bottom_bar, lv_color_hex(0x303030), 0);
     lv_obj_set_style_radius(m_bottom_bar, 0, 0);

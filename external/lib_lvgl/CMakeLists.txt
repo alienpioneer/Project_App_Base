@@ -5,10 +5,6 @@ set(CMAKE_C_STANDARD 99)
 
 set(TARGET_NAME lvgl)
 
-set(CONFIG_LV_BUILD_DEMOS OFF)
-set(CONFIG_LV_BUILD_EXAMPLES OFF)
-set(CONFIG_LV_USE_THORVG_INTERNAL OFF)
-
 if(NOT LVGL_INSTALL_DIR)
     set(LVGL_INSTALL_DIR ${CMAKE_SOURCE_DIR}/libs)
 endif()
@@ -55,15 +51,16 @@ if(CMAKE_CROSSCOMPILING)
     if(USE_GPU)
         list(APPEND EXTRA_DEFINES
             LV_USE_OPENGLES=1
-            LV_LINUX_DRM_USE_EGL=1
-            LV_USE_LINUX_DRM_GBM_BUFFERS=1
             LV_USE_DRAW_OPENGLES=1
-        )
+            LV_LINUX_DRM_USE_EGL=1
+       )
     endif()
 
     target_compile_definitions(${TARGET_NAME} PRIVATE
         LV_CONF_INCLUDE_SIMPLE
         LV_USE_SDL=0
+        LV_USE_DRAW_SDL=0
+        LV_USE_LINUX_DRM=1
         ${EXTRA_DEFINES}
     )
     target_include_directories(${TARGET_NAME} PUBLIC 
@@ -80,14 +77,17 @@ if(CMAKE_CROSSCOMPILING)
         ${GLESV2_LIBRARIES}
     )
 else()
+
+    set(SDL_DRAW_VALUE 0)
+
     if(USE_SDL_DRAW)
-        list(APPEND EXTRA_DEFINES
-            LV_USE_DRAW_SDL=1
-        )
+        set(SDL_DRAW_VALUE 1)
     endif()
 
     target_compile_definitions(${TARGET_NAME} PRIVATE 
         LV_CONF_INCLUDE_SIMPLE
+        LV_USE_SDL=1
+        LV_USE_DRAW_SDL=${SDL_DRAW_VALUE}
         LV_USE_LINUX_DRM=0 
         ${EXTRA_DEFINES}
     )

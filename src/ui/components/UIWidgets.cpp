@@ -319,23 +319,28 @@ lv_obj_t* create_vertical_spinbox_group(lv_obj_t* parent, const UIComponents::Si
 lv_obj_t* create_horiz_dlc_bar(lv_obj_t* parent, const UIComponents::Size size, const int32_t indicatorWidth, const int32_t guideWidth, bool showIndicator)
 {
     lv_obj_t* bar = UIComponents::create_container(parent, size);
-    lv_obj_add_flag(bar, LV_OBJ_FLAG_CLICKABLE);
+
+    lv_obj_set_clickable(bar, true);
 
     // Central guide indicator
     lv_obj_t* guide = lv_obj_create(bar);
-    lv_obj_clear_flag(guide, LV_OBJ_FLAG_SCROLLABLE);
+
+    lv_obj_set_scrollable(guide, false);
+
     lv_obj_set_name_static(guide, "guide");
     lv_obj_set_size(guide, guideWidth, LV_PCT(100)); 
     lv_obj_center(guide);
 
     if(!showIndicator)
     {
-        lv_obj_add_flag(guide, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_set_hidden(guide, true);
     }
 
     // Central line indicator
     lv_obj_t* indicator = lv_obj_create(bar);
-    lv_obj_clear_flag(indicator, LV_OBJ_FLAG_SCROLLABLE);
+
+    lv_obj_set_scrollable(indicator, false);
+
     lv_obj_set_name_static(indicator, "indicator");
     lv_obj_set_size(indicator, indicatorWidth, LV_PCT(100)); 
 
@@ -347,23 +352,28 @@ lv_obj_t* create_horiz_dlc_bar(lv_obj_t* parent, const UIComponents::Size size, 
 lv_obj_t* create_vertical_dlc_bar(lv_obj_t* parent, const UIComponents::Size size, const int32_t indicatorHeight, const int32_t guideHeight, bool showIndicator)
 {
     lv_obj_t* bar = UIComponents::create_container(parent, size);
-    lv_obj_add_flag(bar, LV_OBJ_FLAG_CLICKABLE);
+
+    lv_obj_set_clickable(bar, true);
 
     // Central guide indicator
     lv_obj_t* guide = lv_obj_create(bar);
-    lv_obj_clear_flag(guide, LV_OBJ_FLAG_SCROLLABLE);
+
+    lv_obj_set_scrollable(guide, false);
+
     lv_obj_set_name_static(guide, "guide");
     lv_obj_set_size(guide, LV_PCT(100), guideHeight); 
     lv_obj_center(guide);
 
     if(!showIndicator)
     {
-        lv_obj_add_flag(guide, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_set_hidden(guide, true);
     }
 
     // Central line indicator
     lv_obj_t* indicator = lv_obj_create(bar);
-    lv_obj_clear_flag(indicator, LV_OBJ_FLAG_SCROLLABLE);
+
+    lv_obj_set_scrollable(indicator, false);
+
     lv_obj_set_name_static(indicator, "indicator");
     lv_obj_set_size(indicator, LV_PCT(100), indicatorHeight);
 
@@ -375,27 +385,31 @@ lv_obj_t* create_vertical_dlc_bar(lv_obj_t* parent, const UIComponents::Size siz
 lv_obj_t* create_vertical_fill_dlc_bar(lv_obj_t* parent, const UIComponents::Size size, const int32_t guideHeight, bool showIndicator)
 {
     lv_obj_t* bar = UIComponents::create_container(parent, size);
-    lv_obj_add_flag(bar, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_set_clickable(bar, true);
 
     // Fill bar indicator
     lv_obj_t* indicator = lv_obj_create(bar);
-    lv_obj_clear_flag(indicator, LV_OBJ_FLAG_SCROLLABLE);
-    lv_obj_remove_flag(indicator, LV_OBJ_FLAG_CLICKABLE);
+
+    lv_obj_set_scrollable(indicator, false);
+    lv_obj_set_clickable(indicator, false);
+
     lv_obj_set_name_static(indicator, "indicator");
     lv_obj_set_size(indicator, LV_PCT(100), LV_PCT(50)); 
     lv_obj_align(indicator, LV_ALIGN_BOTTOM_MID, 0, 0);
 
     // Central guide indicator
     lv_obj_t* guide = lv_obj_create(bar);
-    lv_obj_clear_flag(guide, LV_OBJ_FLAG_SCROLLABLE);
-    lv_obj_remove_flag(guide, LV_OBJ_FLAG_CLICKABLE);
+
+    lv_obj_set_scrollable(guide, false);
+    lv_obj_set_clickable(guide, false);
+
     lv_obj_set_name_static(guide, "guide");
     lv_obj_set_size(guide, LV_PCT(100), guideHeight); 
     lv_obj_center(guide);
 
     if(!showIndicator)
     {
-        lv_obj_add_flag(guide, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_set_hidden(guide, true);
     }
 
     return bar;
@@ -541,7 +555,7 @@ lv_obj_t * create_animated_dot(lv_obj_t * parent, UIComponents::Range range, lv_
     lv_obj_remove_style_all(container);
     lv_obj_set_size(container, range.max, range.max);
     // Important so that the child is not clipped by the parent
-    lv_obj_add_flag(container, LV_OBJ_FLAG_OVERFLOW_VISIBLE);
+    lv_obj_set_overflow_visible(container, true);
 
     lv_obj_t * outline = lv_obj_create(container);
     lv_obj_set_name_static(outline, "outline");
@@ -639,8 +653,8 @@ lv_obj_t* create_pswd_popup(lv_obj_t* parent, const UIComponents::Size size, con
     lv_obj_t* overlay = lv_obj_create(parent);
     lv_obj_set_name_static(overlay, "overlay");
     lv_obj_set_size(overlay, LV_PCT(100), LV_PCT(100));
-    lv_obj_clear_flag(overlay, LV_OBJ_FLAG_SCROLLABLE);
-    lv_obj_add_flag(overlay, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_set_scrollable(overlay, false);
+    lv_obj_set_clickable(overlay, true);
 
     lv_obj_t *kb = lv_keyboard_create(overlay);
     lv_obj_set_name_static(kb, "keyboard");
@@ -663,7 +677,7 @@ lv_obj_t* create_pswd_popup(lv_obj_t* parent, const UIComponents::Size size, con
         lv_obj_set_style_text_font(text_area, font , 0);
     }
 
-    lv_obj_add_flag(kb, LV_OBJ_FLAG_SEND_DRAW_TASK_EVENTS);
+    lv_obj_set_send_draw_task_events(kb, true);
 
     // Store a pointer to the parent
     lv_obj_set_user_data(kb, overlay);

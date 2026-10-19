@@ -29,7 +29,7 @@ class LvglPlatform
     const int GESTURE_MAX_DISTANCE = Data::IDataReadUIService::getGestureMinDistance();
 
 public:
-    LvglPlatform(int width, int height, uint8_t resolution_divider=1, bool showCursor=false, bool useCustomInput=false, bool mirrorX=false, bool mirrorY=false);
+    LvglPlatform(int width, int height, uint8_t resolution_divider=1, bool showCursor=false, bool useCustomInput=false, bool scrTouchMirrorX=false, bool scrTouchMirrorY=false);
     ~LvglPlatform();
 
     // Delete copy/move to ensure single static lifetime

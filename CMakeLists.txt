@@ -131,7 +131,7 @@ set(APP_COMMON_INCLUDE
     # The Event types are expecting no include path
     # If moved into a folder like /events must add "${CMAKE_CURRENT_SOURCE_DIR}/include/events"
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
-    "${CMAKE_CURRENT_SOURCE_DIR}/external/lib_lvgl"
+    "${CMAKE_CURRENT_SOURCE_DIR}/external/lib_lvgl/lvgl/include"
     "${CORE_PATH}/include"
     "${LIB_AUDIO_PATH}/include"
     "${CMAKE_CURRENT_BINARY_DIR}/generated"
@@ -159,9 +159,10 @@ endif()
 
 if(CMAKE_CROSSCOMPILING)
     target_compile_definitions(${TARGET_NAME} PRIVATE 
-        LV_CONF_SKIP=0
         LV_CONF_PATH="${CMAKE_CURRENT_SOURCE_DIR}/external/lib_lvgl/lv_conf.h"
         LV_USE_SDL=0
+        LV_USE_DRAW_SDL=0
+        LV_USE_LINUX_DRM=1
     )
 
     target_include_directories(${TARGET_NAME} PRIVATE 
@@ -189,19 +190,17 @@ if(CMAKE_CROSSCOMPILING)
 
 else()
 
-    set(EXTRA_DEFINES "")
+    set(SDL_DRAW_VALUE 0)
 
     if(USE_SDL_DRAW)
-        list(APPEND EXTRA_DEFINES
-            USE_SDL_DRAW=1
-        )
+        set(SDL_DRAW_VALUE 1)
     endif()
     
     target_compile_definitions(${TARGET_NAME} PRIVATE 
-        LV_CONF_SKIP=0 
         LV_CONF_PATH="${CMAKE_CURRENT_SOURCE_DIR}/external/lib_lvgl/lv_conf.h" 
+        LV_USE_SDL=1
         LV_USE_LINUX_DRM=0
-        ${EXTRA_DEFINES}
+        LV_USE_DRAW_SDL=${SDL_DRAW_VALUE}
     )
 
     target_include_directories(${TARGET_NAME} PRIVATE

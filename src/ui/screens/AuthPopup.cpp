@@ -23,7 +23,7 @@ AuthPopup::AuthPopup(UIService* uiservice)
     // Add password keyboard
     m_popup = UIWidgets::create_pswd_popup(lv_layer_top(), {900,400}, &lv_font_montserrat_24);
     lv_obj_align(m_popup, LV_ALIGN_CENTER, 0, 0);
-    lv_obj_add_flag(m_popup, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_set_hidden(m_popup, true);
     lv_obj_add_style(m_popup, &StyleManager::style_pswd_overlay, 0);
 
     m_keyboard = lv_obj_get_child_by_name(m_popup, "keyboard");

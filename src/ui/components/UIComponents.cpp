@@ -40,17 +40,17 @@ static void two_exclusive_btn_group_cb(lv_event_t *e)
     {
         // std::cout << "Button 1" << std::endl;
         lv_obj_add_state(btn1, LV_STATE_CHECKED);
-        lv_obj_remove_flag(btn1, LV_OBJ_FLAG_CLICKABLE);
+        lv_obj_set_clickable(btn1, false);
         lv_obj_clear_state(btn2, LV_STATE_CHECKED);
-        lv_obj_add_flag(btn2, LV_OBJ_FLAG_CLICKABLE);
+        lv_obj_set_clickable(btn2, true);
     }
     else if (btn2 == cur_btn)
     {
         // std::cout << "Button 2" << std::endl;
         lv_obj_add_state(btn2, LV_STATE_CHECKED);
-        lv_obj_remove_flag(btn2, LV_OBJ_FLAG_CLICKABLE);
+        lv_obj_set_clickable(btn2, false);
         lv_obj_clear_state(btn1, LV_STATE_CHECKED);
-        lv_obj_add_flag(btn1, LV_OBJ_FLAG_CLICKABLE);
+        lv_obj_set_clickable(btn1, true);
     }
 }
 
@@ -77,24 +77,24 @@ static void three_exclusive_btn_group_cb(lv_event_t *e)
     lv_obj_clear_state(btn1, LV_STATE_CHECKED);
     lv_obj_clear_state(btn2, LV_STATE_CHECKED);
     lv_obj_clear_state(btn3, LV_STATE_CHECKED);
-    lv_obj_add_flag(btn1, LV_OBJ_FLAG_CLICKABLE);
-    lv_obj_add_flag(btn2, LV_OBJ_FLAG_CLICKABLE);
-    lv_obj_add_flag(btn3, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_set_clickable(btn1, true);
+    lv_obj_set_clickable(btn2, true);
+    lv_obj_set_clickable(btn3, true);
 
     if (btn1 == cur_btn)
     {
         lv_obj_add_state(btn1, LV_STATE_CHECKED);
-        lv_obj_remove_flag(btn1, LV_OBJ_FLAG_CLICKABLE);
+        lv_obj_set_clickable(btn1, false);
     }
     else if (btn2 == cur_btn)
     {
         lv_obj_add_state(btn2, LV_STATE_CHECKED);
-        lv_obj_remove_flag(btn2, LV_OBJ_FLAG_CLICKABLE);
+        lv_obj_set_clickable(btn2, false);
     }
     else if (btn3 == cur_btn)
     {
         lv_obj_add_state(btn3, LV_STATE_CHECKED);
-        lv_obj_remove_flag(btn3, LV_OBJ_FLAG_CLICKABLE);
+        lv_obj_set_clickable(btn3, false);
     }
 }
 
@@ -196,8 +196,8 @@ lv_obj_t* create_invisible_button(lv_obj_t* parent, const Size size)
     lv_obj_remove_style_all(hitbox);
     lv_obj_set_size(hitbox, size.width, size.height);
     
-    lv_obj_add_flag(hitbox, LV_OBJ_FLAG_CLICKABLE);
-    lv_obj_clear_flag(hitbox, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_set_clickable(hitbox, true);
+    lv_obj_set_scrollable(hitbox,false);
 
     return hitbox;
 }
@@ -216,15 +216,15 @@ lv_obj_t* create_horiz_two_exclusive_btn_group(lv_obj_t* parent, const Size size
 
     lv_obj_t* btn1 = create_round_button(group, btn_size, options.label1);
     lv_obj_set_name_static(btn1, "button1");
-    lv_obj_add_flag(btn1, LV_OBJ_FLAG_CHECKABLE);
-    lv_obj_add_flag(btn1, LV_OBJ_FLAG_EVENT_BUBBLE);
-    lv_obj_remove_flag(btn1, LV_OBJ_FLAG_CLICKABLE);
 
+    lv_obj_set_checkable(btn1, true);
+    lv_obj_set_event_bubble(btn1, true);
+    lv_obj_set_clickable(btn1, false);
 
     lv_obj_t* btn2 = create_round_button(group, btn_size, options.label2);
     lv_obj_set_name_static(btn2, "button2");
-    lv_obj_add_flag(btn2, LV_OBJ_FLAG_CHECKABLE);
-    lv_obj_add_flag(btn2, LV_OBJ_FLAG_EVENT_BUBBLE);
+    lv_obj_set_checkable(btn2, true);
+    lv_obj_set_event_bubble(btn2, true);
 
     // Start with button 1 checked
     lv_obj_add_state(btn1, LV_STATE_CHECKED);
@@ -263,8 +263,8 @@ lv_obj_t* create_vert_two_exclusive_btn_group(lv_obj_t* parent, const Size size,
     }
     
     lv_obj_set_name_static(btn1, "button1");
-    lv_obj_add_flag(btn1, LV_OBJ_FLAG_CHECKABLE);
-    lv_obj_add_flag(btn1, LV_OBJ_FLAG_EVENT_BUBBLE);
+    lv_obj_set_checkable(btn1, true);
+    lv_obj_set_event_bubble(btn1, true);
 
     lv_obj_t* btn2 = nullptr;
     if (options.label2 && options.label2[0] != '\0')
@@ -283,12 +283,13 @@ lv_obj_t* create_vert_two_exclusive_btn_group(lv_obj_t* parent, const Size size,
     }
     
     lv_obj_set_name_static(btn2, "button2");
-    lv_obj_add_flag(btn2, LV_OBJ_FLAG_CHECKABLE);
-    lv_obj_add_flag(btn2, LV_OBJ_FLAG_EVENT_BUBBLE);
+
+    lv_obj_set_checkable(btn2, true);
+    lv_obj_set_event_bubble(btn2, true);
 
     // Start with button 1 checked
     lv_obj_add_state(btn1, LV_STATE_CHECKED);
-    lv_obj_remove_flag(btn1, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_set_clickable(btn1, false);
 
     lv_obj_add_event_cb(group, two_exclusive_btn_group_cb, LV_EVENT_CLICKED, nullptr);
 
@@ -323,8 +324,9 @@ lv_obj_t* create_three_horiz_exclusive_btn_group(lv_obj_t* parent, const Size si
     }
     
     lv_obj_set_name_static(btn1, "button1");
-    lv_obj_add_flag(btn1, LV_OBJ_FLAG_CHECKABLE);
-    lv_obj_add_flag(btn1, LV_OBJ_FLAG_EVENT_BUBBLE);
+
+    lv_obj_set_checkable(btn1, true);
+    lv_obj_set_event_bubble(btn1, true);
 
     lv_obj_t* btn2 = nullptr;
     if (options.label2 && options.label2[0] != '\0')
@@ -343,8 +345,9 @@ lv_obj_t* create_three_horiz_exclusive_btn_group(lv_obj_t* parent, const Size si
     }
     
     lv_obj_set_name_static(btn2, "button2");
-    lv_obj_add_flag(btn2, LV_OBJ_FLAG_CHECKABLE);
-    lv_obj_add_flag(btn2, LV_OBJ_FLAG_EVENT_BUBBLE);
+
+    lv_obj_set_checkable(btn2, true);
+    lv_obj_set_event_bubble(btn2, true);
     
     lv_obj_t* btn3 = nullptr;
     if (options.label3 && options.label3[0] != '\0')
@@ -363,12 +366,12 @@ lv_obj_t* create_three_horiz_exclusive_btn_group(lv_obj_t* parent, const Size si
     }
     
     lv_obj_set_name_static(btn3, "button3");
-    lv_obj_add_flag(btn3, LV_OBJ_FLAG_CHECKABLE);
-    lv_obj_add_flag(btn3, LV_OBJ_FLAG_EVENT_BUBBLE);
+    lv_obj_set_checkable(btn3, true);
+    lv_obj_set_event_bubble(btn3, true);
     
     // Start with button 1 checked
     lv_obj_add_state(btn1, LV_STATE_CHECKED);
-    lv_obj_remove_flag(btn1, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_set_clickable(btn1, false);
 
     lv_obj_add_event_cb(group, three_exclusive_btn_group_cb, LV_EVENT_CLICKED, nullptr);
 
@@ -382,7 +385,7 @@ lv_obj_t* create_slider_with_icon(lv_obj_t* parent, const Size size, const int32
     lv_obj_t* container = lv_obj_create(parent);
     lv_obj_set_size(container, size.width, size.height);
     // Remove properties
-    lv_obj_clear_flag(container, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_set_scrollable(container, false);
     lv_obj_set_style_bg_opa(container, LV_OPA_TRANSP, 0);
     lv_obj_set_style_border_width(container, 0, 0);
     lv_obj_set_style_shadow_width(container, 0, 0);
@@ -403,7 +406,7 @@ lv_obj_t* create_slider_with_icon(lv_obj_t* parent, const Size size, const int32
     lv_obj_t* slider = lv_slider_create(container);
     lv_obj_set_name_static(slider, "slider");
     lv_obj_set_flex_grow(slider, 1);
-    lv_obj_clear_flag(slider, LV_OBJ_FLAG_GESTURE_BUBBLE);
+    lv_obj_set_gesture_bubble(slider, false);
 
     lv_slider_set_range(slider, range.min, range.max);
     lv_slider_set_value(slider, range.min, LV_ANIM_OFF);
@@ -424,8 +427,8 @@ lv_obj_t* create_container(lv_obj_t* parent, const Size size)
 {
     lv_obj_t * container = lv_obj_create(parent);
     lv_obj_remove_style_all(container);
-    lv_obj_remove_flag(container, LV_OBJ_FLAG_SCROLLABLE);
-    lv_obj_remove_flag(container, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_set_scrollable(container, false);
+    lv_obj_set_clickable(container, false);
     lv_obj_set_width(container, size.width);
     lv_obj_set_height(container, size.height);
     return container;
@@ -435,8 +438,8 @@ lv_obj_t* create_base_container(lv_obj_t* parent)
 {
     lv_obj_t * container = lv_obj_create(parent);
     lv_obj_remove_style_all(container);
-    lv_obj_remove_flag(container, LV_OBJ_FLAG_SCROLLABLE);
-    lv_obj_remove_flag(container, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_set_scrollable(container, false);
+    lv_obj_set_clickable(container, false);
     lv_obj_set_width(container, lv_obj_get_width(parent));
     lv_obj_set_height(container, lv_obj_get_height(parent));
     return container;
@@ -469,8 +472,8 @@ lv_obj_t* create_swipe_container(lv_obj_t* parent, const Size size, const int32_
     lv_obj_set_style_pad_gap(scroll_container, items.spacing, 0);
 
     // Horizontal-only scrolling, no scroll bars visible
-    lv_obj_add_flag(scroll_container, LV_OBJ_FLAG_SCROLLABLE);
-    lv_obj_add_flag(scroll_container, LV_OBJ_FLAG_SCROLL_ONE);   // No momentum 
+    lv_obj_set_scrollable(scroll_container, true);
+    lv_obj_set_scroll_one(scroll_container, true); // No momentum 
     lv_obj_set_scroll_dir(scroll_container, LV_DIR_HOR);
     lv_obj_set_scrollbar_mode(scroll_container, LV_SCROLLBAR_MODE_OFF);
     lv_obj_set_scroll_snap_x(scroll_container, LV_SCROLL_SNAP_CENTER);
@@ -480,7 +483,8 @@ lv_obj_t* create_swipe_container(lv_obj_t* parent, const Size size, const int32_
         lv_obj_t *cell = lv_obj_create(scroll_container);
         lv_obj_remove_style_all(cell);
         lv_obj_set_size(cell, LV_PCT(80), LV_PCT(85));
-        lv_obj_clear_flag(cell, LV_OBJ_FLAG_SCROLLABLE);
+        lv_obj_set_scrollable(cell, false);
+
         lv_obj_set_style_pad_left(cell, 0, 0);
         lv_obj_set_style_pad_right(cell, 0, 0);
         // Add index as user data
@@ -515,7 +519,8 @@ lv_obj_t* create_swipe_dots_indicator(lv_obj_t* parent, lv_obj_t* tileview, cons
     lv_obj_set_flex_flow(dots_container, LV_FLEX_FLOW_ROW);
     lv_obj_set_flex_align(dots_container, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
     lv_obj_set_style_pad_column(dots_container, height, 0);
-    lv_obj_remove_flag(dots_container, LV_OBJ_FLAG_CLICKABLE);
+
+    lv_obj_set_clickable(dots_container, false);
 
     // Create the N dots
     for(int i = 0; i < number; i++) 
@@ -536,7 +541,8 @@ lv_obj_t* create_swipe_dots_indicator(lv_obj_t* parent, lv_obj_t* tileview, cons
         }
         
         lv_obj_set_style_bg_opa(dot, LV_OPA_COVER, 0);
-        lv_obj_remove_flag(dot, LV_OBJ_FLAG_CLICKABLE);
+
+        lv_obj_set_clickable(dot, false); 
     }
 
     lv_obj_add_event_cb(tileview, [](lv_event_t* e) 
@@ -596,8 +602,9 @@ lv_obj_t* create_level_indicator(lv_obj_t* parent, const Size size, uint32_t lev
     lv_obj_t* indicator = lv_obj_create(container);
     lv_obj_set_name_static(indicator, "indicator");
     lv_obj_set_style_border_width(indicator, 0, 0);
-    lv_obj_clear_flag(indicator, LV_OBJ_FLAG_SCROLLABLE);
-    lv_obj_remove_flag(indicator, LV_OBJ_FLAG_CLICKABLE);
+
+    lv_obj_set_scrollable(indicator, false);
+    lv_obj_set_clickable(indicator, false);
 
     lv_obj_t* line = nullptr;
     for (uint32_t i = 1; i < levelNumber; i++)
