@@ -14,7 +14,7 @@ RES_AUDIO="OFF"
 RES_FONTS="OFF"
 RES_VECTOR="OFF"
 
-USE_SDL_DRAW="ON"
+USE_GPU="ON"
 
 RUN=false
 DEPLOY=false
@@ -41,6 +41,8 @@ do
         unit)    MODE="host"; UNIT_OPT="ON"; DEPLOY_DIR="./deploy/host" ;;
         static)  MODE="host"; STATIC_OPT="ON"; DEPLOY_DIR="./deploy/host" ;;
 
+        cpu)     USE_GPU="OFF";;
+
         debug)   BUILD_TYPE="Debug" ; LOG_LEVEL="LOG_LEVEL_DEBUG" ;;
         release) BUILD_TYPE="Release" ; LOG_LEVEL="LOG_LEVEL_INFO" ;;
         reldeb)  BUILD_TYPE="RelWithDebInfo" ; LOG_LEVEL="LOG_LEVEL_DEBUG" ;;
@@ -52,14 +54,12 @@ do
         vector)  SCOPE="resources"; RES_VECTOR="ON";;
         resall)  SCOPE="resources"; RES_IMAGES="ON"; RES_AUDIO="ON"; RES_FONTS="ON"; RES_VECTOR="ON";;
 
-        sdlsw)   USE_SDL_DRAW="OFF";;
-
         run)     RUN=true ; DEPLOY_DIR="./deploy/host";;
         deploy)  DEPLOY=true;;
 
         h|--help)
             echo "Usage:"
-            echo "./build.sh [unit] [host|target] [debug|release|reldeb|min] [run] [deploy] [img|audio|fonts|vector|resall] [sdlsw] [clean]"
+            echo "./build.sh [unit] [host|target] [debug|release|reldeb|min] [run] [deploy] [img|audio|fonts|vector|resall] [clean] [cpu]"
             exit 0;;
         *)
             echo "Unknown argument: $arg (skipping)";;
@@ -82,7 +82,7 @@ else
 fi
 
 # Clean
-if [ "$CLEAN_OPT" = "ON" ]; then
+if [ "$CLEAN_OPT" = "ON" ] && [ -d "$BUILD_DIR" ]; then
     echo "--- Clean project folder ---"
     rm -rf "$BUILD_DIR"
 fi
@@ -91,6 +91,7 @@ echo "------------------------------------------"
 echo "MODE:        $MODE"
 echo "SCOPE:       $SCOPE"
 echo "BUILD TYPE:  $BUILD_TYPE"
+echo "USE GPU:     $USE_GPU"
 echo "BUILD DIR:   $BUILD_DIR"
 echo "UNIT TESTS:  $UNIT_OPT"
 echo "STATIC TEST: $STATIC_OPT"
@@ -110,6 +111,7 @@ if [ "$MODE" = "target" ]; then
         -DCMAKE_TOOLCHAIN_FILE="$TOOLCHAIN_FILE" \
         -DBUILD_PYTHON="$PYTHON_PATH" \
         -DBUILD_RESOURCES="$BUILD_RESOURCES" \
+        -DUSE_GPU="$USE_GPU" \
         -DLOG_LEVEL="$LOG_LEVEL" \
         $EXTRA_ARGS
 
@@ -119,13 +121,13 @@ else
         -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
         -DRUN_UNIT_TESTS="$UNIT_OPT" \
         -DBUILD_RESOURCES="$BUILD_RESOURCES" \
-        -DUSE_SDL_DRAW="$USE_SDL_DRAW" \
+        -DUSE_GPU="$USE_GPU" \
         -DLOG_LEVEL="$LOG_LEVEL" \
         -DRUN_STATIC_ANALYSIS="$STATIC_OPT" \
         $EXTRA_ARGS
 fi
 
-cmake --build "$BUILD_DIR" --parallel 8
+cmake --build "$BUILD_DIR" --target app --parallel 8
 # cmake --build "$BUILD_DIR" --parallel 8 --clean-first
 
 # ---- Actions ----

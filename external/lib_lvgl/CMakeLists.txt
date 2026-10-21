@@ -9,8 +9,11 @@ if(NOT LVGL_INSTALL_DIR)
     set(LVGL_INSTALL_DIR ${CMAKE_SOURCE_DIR}/libs)
 endif()
 
-option(USE_GPU "Enable OpenGL ES rendering" ON)
-option(USE_SDL_DRAW "Enable SDL DRAW" ON)
+# ----------- OPTIONS
+
+option(USE_GPU "Enable GPU rendering" ON)
+
+# ----------- DEPENDENCIES
 
 find_package(PkgConfig REQUIRED)
 
@@ -32,8 +35,9 @@ else()
 
 endif()
 
-set(LVGL_PREBUILT_LIB "${LVGL_PREBUILT_DIR}/liblvgl.a")
+# ----------- PATHS
 
+set(LVGL_PREBUILT_LIB "${LVGL_PREBUILT_DIR}/liblvgl.a")
 message(STATUS "Building LVGL static library ${LVGL_PREBUILT_LIB}...")
 
 file(GLOB_RECURSE LVGL_SRC ${CMAKE_CURRENT_SOURCE_DIR}/lvgl/src/*.c)
@@ -45,11 +49,14 @@ endif()
 add_library(${TARGET_NAME} STATIC ${LVGL_SRC})
 set_target_properties(${TARGET_NAME} PROPERTIES LINKER_LANGUAGE C)
 
+# ----------- Build settings
+
 if(CMAKE_CROSSCOMPILING)
-    set(EXTRA_DEFINES "")
+
+    set(GPU_DEFINES "")
 
     if(USE_GPU)
-        list(APPEND EXTRA_DEFINES
+        list(APPEND GPU_DEFINES
             LV_USE_OPENGLES=1
             LV_USE_DRAW_OPENGLES=1
             LV_LINUX_DRM_USE_EGL=1
@@ -61,7 +68,7 @@ if(CMAKE_CROSSCOMPILING)
         LV_USE_SDL=0
         LV_USE_DRAW_SDL=0
         LV_USE_LINUX_DRM=1
-        ${EXTRA_DEFINES}
+        ${GPU_DEFINES}
     )
     target_include_directories(${TARGET_NAME} PUBLIC 
         ${CMAKE_CURRENT_SOURCE_DIR} 
@@ -80,7 +87,7 @@ else()
 
     set(SDL_DRAW_VALUE 0)
 
-    if(USE_SDL_DRAW)
+    if(USE_GPU)
         set(SDL_DRAW_VALUE 1)
     endif()
 
@@ -89,7 +96,6 @@ else()
         LV_USE_SDL=1
         LV_USE_DRAW_SDL=${SDL_DRAW_VALUE}
         LV_USE_LINUX_DRM=0 
-        ${EXTRA_DEFINES}
     )
     target_include_directories(${TARGET_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} lvgl ${SDL2_INCLUDE_DIRS})
     target_link_libraries(${TARGET_NAME} PUBLIC ${SDL2_LIBRARIES})

@@ -11,24 +11,30 @@ LVGL_BUILD_DIR="$LVGL_SRC_DIR/build"
 LVGL_INSTALL_DIR="$PROJECT_ROOT/libs"
 
 USE_GPU="ON"
-USE_SDL_DRAW="ON"
+
 BUILD_TYPE="Debug"
+
+CLEAN_OPT="OFF"
 
 TOOLCHAIN_FILE="../../cmake/toolchain-rpi.cmake"
 
 for arg in "$@"
 do
     case "$arg" in
-        "host")     MODE="host" ;;
-        "target")   MODE="target";;
-        "sdlsw")    USE_SDL_DRAW="OFF" ;;
-        "cpu")      USE_GPU="OFF" ;;
-        "debug")    BUILD_TYPE="Debug" ;;
-        "rel")      BUILD_TYPE="Release";;
-        "reldeb")   BUILD_TYPE="RelWithDebInfo";;
-        "min")      BUILD_TYPE="MinSizeRel";;
-        "h"|"--help") 
-            echo "Usage: ./build.sh [host|target] [debug|rel|reldeb|min] [cpu|sdlsw]"
+        host)     MODE="host" ;;
+        target)   MODE="target";;
+
+        cpu)      USE_GPU="OFF" ;;
+
+        debug)    BUILD_TYPE="Debug" ;;
+        rel)      BUILD_TYPE="Release";;
+        reldeb)   BUILD_TYPE="RelWithDebInfo";;
+        min)      BUILD_TYPE="MinSizeRel";;
+
+        clean)   CLEAN_OPT="OFF";;
+
+        h|--help) 
+            echo "Usage: ./build.sh [host|target] [debug|rel|reldeb|min] [cpu] [clean]"
             echo "sdlsw DISABLES the SDL_DRAW"
             exit 0 ;;
         *) echo "Unknown argument: $arg (skipping)" ;;
@@ -41,8 +47,12 @@ echo "BUILD CONFIGURATION:"
 echo "  MODE:        $MODE"
 echo "  BUILD TYPE:  $BUILD_TYPE"
 echo "  Use GPU:     $USE_GPU"
-echo "  SDL DRAW:    $USE_SDL_DRAW"
 echo "------------------------------------------"
+
+if [ "$CLEAN_OPT" = "ON" ] && [ -d "$LVGL_BUILD_DIR" ]; then
+    echo "--- Clean project folder ---"
+    rm -rf "$BUILD_DIR"
+fi
 
 # Clean up previous build
 if [ -d "$LVGL_BUILD_DIR" ]; then
@@ -58,22 +68,20 @@ if [ "$MODE" = "target" ]; then
         -DCMAKE_TOOLCHAIN_FILE="$TOOLCHAIN_FILE" \
         -DLVGL_INSTALL_DIR="$LVGL_INSTALL_DIR" \
         -DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
-        -DUSE_GPU="$USE_GPU" \
-        -DUSE_SDL_DRAW="$USE_SDL_DRAW"
+        -DUSE_GPU="$USE_GPU"
 
 else
 
     cmake -S . -B "$LVGL_BUILD_DIR" \
         -DLVGL_INSTALL_DIR="$LVGL_INSTALL_DIR" \
         -DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
-        -DUSE_GPU="$USE_GPU" \
-        -DUSE_SDL_DRAW="$USE_SDL_DRAW"
+        -DUSE_GPU="$USE_GPU"
 
 fi
 
-echo "---------> LVGL configure completed."
+echo "---> LVGL configure completed."
 
 cmake --build "$LVGL_BUILD_DIR" --target lvgl --parallel 8 --clean-first
 
-echo "--- LVGL Build Complete ---"
+echo "---> LVGL Build Complete ---"
 echo "Library installed to: $LVGL_INSTALL_DIR"

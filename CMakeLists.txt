@@ -32,7 +32,7 @@ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g1 -DNDEBUG")
 
 # ----------- OPTIONS
 
-option(USE_SDL_DRAW "Enable SDL Texture rendering" ON)
+option(USE_GPU "Enable GPU rendering" ON)
 
 # ----------- PATHS
 
@@ -158,11 +158,23 @@ else()
 endif()
 
 if(CMAKE_CROSSCOMPILING)
+
+    set(GPU_DEFINES "")
+
+    if(USE_GPU)
+        list(APPEND GPU_DEFINES
+            LV_USE_OPENGLES=1
+            LV_USE_DRAW_OPENGLES=1
+            LV_LINUX_DRM_USE_EGL=1
+       )
+    endif()
+
     target_compile_definitions(${TARGET_NAME} PRIVATE 
         LV_CONF_PATH="${CMAKE_CURRENT_SOURCE_DIR}/external/lib_lvgl/lv_conf.h"
         LV_USE_SDL=0
         LV_USE_DRAW_SDL=0
         LV_USE_LINUX_DRM=1
+        ${GPU_DEFINES}
     )
 
     target_include_directories(${TARGET_NAME} PRIVATE 
@@ -192,15 +204,15 @@ else()
 
     set(SDL_DRAW_VALUE 0)
 
-    if(USE_SDL_DRAW)
+    if(USE_GPU)
         set(SDL_DRAW_VALUE 1)
     endif()
     
     target_compile_definitions(${TARGET_NAME} PRIVATE 
         LV_CONF_PATH="${CMAKE_CURRENT_SOURCE_DIR}/external/lib_lvgl/lv_conf.h" 
         LV_USE_SDL=1
-        LV_USE_LINUX_DRM=0
         LV_USE_DRAW_SDL=${SDL_DRAW_VALUE}
+        LV_USE_LINUX_DRM=0
     )
 
     target_include_directories(${TARGET_NAME} PRIVATE
