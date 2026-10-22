@@ -3,6 +3,8 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
+cd "$(dirname "$(readlink -f "$0")")"
+
 MODE="host"   # host | target | yocto
 
 PROJECT_ROOT=$(pwd)
@@ -27,15 +29,14 @@ do
         cpu)      USE_GPU="OFF" ;;
 
         debug)    BUILD_TYPE="Debug" ;;
-        rel)      BUILD_TYPE="Release";;
+        release)  BUILD_TYPE="Release";;
         reldeb)   BUILD_TYPE="RelWithDebInfo";;
         min)      BUILD_TYPE="MinSizeRel";;
 
         clean)   CLEAN_OPT="OFF";;
 
         h|--help) 
-            echo "Usage: ./build.sh [host|target] [debug|rel|reldeb|min] [cpu] [clean]"
-            echo "sdlsw DISABLES the SDL_DRAW"
+            echo "Usage: ./build.sh [host|target] [debug|release|reldeb|min] [cpu] [clean]"
             exit 0 ;;
         *) echo "Unknown argument: $arg (skipping)" ;;
     esac

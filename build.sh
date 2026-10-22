@@ -29,12 +29,16 @@ PYTHON_PATH=$(which python3)
 TARGET="strutu@192.168.1.32"
 TOOLCHAIN_FILE="cmake/toolchain-rpi.cmake"
 
+LVGL=false
+LVGL_SCRIPT="./external/lib_lvgl/build_lvgl.sh"
 
 for arg in "$@"
 do
     case "$arg" in
         host)    MODE="host" ; DEPLOY_DIR="./deploy/host" ;;
         target)  MODE="target";;
+
+        lvgl)    LVGL=true;;
 
         clean)   CLEAN_OPT="ON";;
 
@@ -59,12 +63,29 @@ do
 
         h|--help)
             echo "Usage:"
-            echo "./build.sh [unit] [host|target] [debug|release|reldeb|min] [run] [deploy] [img|audio|fonts|vector|resall] [clean] [cpu]"
+            echo "./build.sh [unit] [host|target] [lvgl] [debug|release|reldeb|min] [run] [deploy] [img|audio|fonts|vector|resall] [clean] [cpu]"
             exit 0;;
         *)
             echo "Unknown argument: $arg (skipping)";;
     esac
 done
+
+if $LVGL; then
+
+    LVGL_CPU=""
+    [ "$USE_GPU" = "OFF" ] && LVGL_CPU="cpu"
+    
+    case "$BUILD_TYPE" in
+        Debug)          LVGL_TYPE="debug";;
+        Release)        LVGL_TYPE="release";;
+        RelWithDebInfo) LVGL_TYPE="reldeb";;
+        MinSizeRel)     LVGL_TYPE="min";;
+    esac
+
+    "$LVGL_SCRIPT" "$MODE" "$LVGL_TYPE" $LVGL_CPU
+
+    exit 0
+fi
 
 # Change build directory depending on operation
 BUILD_DIR="$BUILD_DIR_BASE"
